@@ -1,0 +1,28 @@
+name: Release
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+    inputs:
+      TAG_NAME:
+        description: 'Tag name that the major tag will point to'
+        required: true
+
+env:
+  TAG_NAME: ${{ github.event.inputs.TAG_NAME || github.event.release.tag_name }}
+
+permissions:
+  contents: write
+
+jobs:
+  update_tag:
+    name: Update the major tag to include the ${{ github.event.inputs.TAG_NAME || github.event.release.tag_name }} changes
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+    steps:
+      - name: Update the ${{ env.TAG_NAME }} tag
+        id: update-major-tag
+        uses: actions/publish-action@89417ee1d51c9ce0a517c90d7fc5b26a86bd1558
+        with:
+          source-tag: ${{ env.TAG_NAME }}
