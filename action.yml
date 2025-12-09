@@ -23,7 +23,7 @@ runs:
         TOOL=${{ inputs.tool }}
 
         stat $TOOL_VERSION_FILENAME > /dev/null 2>&1 || (echo "::error file=$TOOL_VERSION_FILENAME,title=Failed to locate .tool-versions file::Tool versions file at $TOOL_VERSION_FILENAME did not exist!"; exit 1)
-        VERSION=$(grep $TOOL $TOOL_VERSION_FILENAME | cut -d ' ' -f 2)
+        VERSION=$(grep "$TOOL " $TOOL_VERSION_FILENAME | cut -d ' ' -f 2)
         test -z $VERSION && (echo "::error file=$TOOL_VERSION_FILENAME,title=Tool version not found::Tool versions file at $TOOL_VERSION_FILENAME did not contain a version for tool $TOOL!"; exit 1)
         echo "$TOOL_VERSION_FILENAME -> $TOOL $VERSION"
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
